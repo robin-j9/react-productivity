@@ -11,6 +11,7 @@ class TodoList extends Component {
       { id: 3, taskName: "task3", subtasks: ["subtask1", "subtask2"] },
       { id: 4, taskName: "task4", subtasks: ["subtask1", "subtask2"] },
     ],
+    newTodo: "",
   };
 
   handleReset = (item) => {
@@ -31,13 +32,24 @@ class TodoList extends Component {
     this.setState({ todoItems });
   };
 
-  handleAddItem = () => {
+  handleAddItem = (taskName) => {
     const todoItems = this.state.todoItems.concat({
-      id: 5,
-      taskName: "added task",
+      id: this.state.todoItems[this.state.todoItems.length - 1].id + 1,
+      taskName: taskName,
       subtasks: [],
     });
     this.setState({ todoItems });
+  };
+
+  handleChange = (event) => {
+    this.setState({ newTodo: event.target.value });
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(this.state.newTodo);
+    this.handleAddItem(this.state.newTodo);
+    this.setState({ newTodo: "" });
   };
 
   render() {
@@ -52,13 +64,18 @@ class TodoList extends Component {
             >
               Empty List
             </button>
-            <button
-              onClick={this.handleAddItem}
-              className="btn btn-primary float-right"
-            >
-              Add Item
-            </button>
           </div>
+        </div>
+        <div className="col-6 offset-3">
+          <form onSubmit={this.handleSubmit}>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Enter new task"
+              value={this.state.newTodo}
+              onChange={this.handleChange}
+            />
+          </form>
         </div>
         <div className="row">
           <div className="col-6 offset-3">
